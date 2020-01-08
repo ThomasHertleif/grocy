@@ -272,7 +272,7 @@ class StockService extends BaseService
 		}
 	}
 
-	public function ConsumeProduct(int $productId, float $amount, bool $spoiled, $transactionType, $specificStockEntryId = 'default', $recipeId = null, $locationId = null, &$transactionId = null)
+	public function ConsumeProduct(int $productId, float $amount, bool $spoiled, $transactionType, $specificStockEntryId = 'default', $recipeId = null, $locationId = null, &$transactionId = null, $userId = 1)
 	{
 		if (!$this->ProductExists($productId))
 		{
@@ -347,7 +347,8 @@ class StockService extends BaseService
 						'price' => $stockEntry->price,
 						'opened_date' => $stockEntry->opened_date,
 						'recipe_id' => $recipeId,
-						'transaction_id' => $transactionId
+						'transaction_id' => $transactionId,
+						'user_id' => $userId
 					));
 					$logRow->save();
 
@@ -371,7 +372,8 @@ class StockService extends BaseService
 						'price' => $stockEntry->price,
 						'opened_date' => $stockEntry->opened_date,
 						'recipe_id' => $recipeId,
-						'transaction_id' => $transactionId
+						'transaction_id' => $transactionId,
+						'user_id' => $userId
 					));
 					$logRow->save();
 

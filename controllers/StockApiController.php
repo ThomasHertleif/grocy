@@ -2,6 +2,7 @@
 
 namespace Grocy\Controllers;
 
+use Grocy\Services\ApiKeyService;
 use \Grocy\Services\StockService;
 
 class StockApiController extends BaseApiController
@@ -10,6 +11,7 @@ class StockApiController extends BaseApiController
 	{
 		parent::__construct($container);
 		$this->StockService = new StockService();
+		$this->ApiKeyService = new ApiKeyService();
 	}
 
 	protected $StockService;
@@ -219,6 +221,15 @@ class StockApiController extends BaseApiController
 	{
 		$requestBody = $request->getParsedBody();
 
+		$apiKey = $request->getHeader('GROCY-API-KEY');
+
+		$userId = $this->ApiKeyService->GetUserByApiKey($apiKey)->id;
+
+		// return json_encode($userId);
+
+		// $userId = 12;
+
+
 		try
 		{
 			if ($requestBody === null)
@@ -261,7 +272,9 @@ class StockApiController extends BaseApiController
 				$recipeId = $requestBody['recipe_id'];
 			}
 
-			$bookingId = $this->StockService->ConsumeProduct($args['productId'], $requestBody['amount'], $spoiled, $transactionType, $specificStockEntryId, $recipeId, $locationId);
+			$null = null;
+
+			$bookingId = $this->StockService->ConsumeProduct($args['productId'], $requestBody['amount'], $spoiled, $transactionType, $specificStockEntryId, $recipeId, $locationId, $null, $userId);
 			return $this->ApiResponse($this->Database->stock_log($bookingId));
 		}
 		catch (\Exception $ex)
